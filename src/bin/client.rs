@@ -25,14 +25,7 @@ async fn main() {
             value: None,
             request_type: volo_gen::mini::redis::RequestType::Illegal,
         };
-        if string_vec[0] == "PING" {
-            req = volo_gen::mini::redis::RedisRequest {
-                key: None,
-                value: Some(input.strip_prefix("PING ").unwrap().to_string().into()),
-                request_type: volo_gen::mini::redis::RequestType::Ping,
-            }
-        }
-        else if string_vec[0] == "SET" && string_vec.len() == 3 {
+        if string_vec[0] == "SET" && string_vec.len() == 3 {
             req = volo_gen::mini::redis::RedisRequest {
                 key: Some(vec![string_vec.get(1).unwrap().clone().into()]),
                 value: Some(string_vec.get(2).unwrap().clone().into()),
@@ -44,6 +37,13 @@ async fn main() {
                 key: Some(vec![string_vec.get(1).unwrap().clone().into()]),
                 value: None,
                 request_type: volo_gen::mini::redis::RequestType::Get,
+            }
+        }
+        else if string_vec[0] == "PING" {
+            req = volo_gen::mini::redis::RedisRequest {
+                key: None,
+                value: Some(input.strip_prefix("PING ").unwrap().to_string().into()),
+                request_type: volo_gen::mini::redis::RequestType::Ping,
             }
         }
         else if string_vec[0] == "DEL" {

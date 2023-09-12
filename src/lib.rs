@@ -45,12 +45,6 @@ impl volo_gen::mini::redis::RedisService for S {
     ) -> ::core::result::Result<volo_gen::mini::redis::RedisResponse, ::volo_thrift::AnyhowError>
     {
         match req.request_type {
-            volo_gen::mini::redis::RequestType::Ping => {
-                return Ok(volo_gen::mini::redis::RedisResponse {
-                    value: req.value,
-                    response_type: volo_gen::mini::redis::ResponseType::Value,
-                });
-            }
             volo_gen::mini::redis::RequestType::Set => {
                 let _ = self.map.lock().unwrap().insert(req.key.unwrap().get(0).unwrap().to_string(), req.value.unwrap().to_string(),);
                 return Ok(volo_gen::mini::redis::RedisResponse {
@@ -71,6 +65,12 @@ impl volo_gen::mini::redis::RedisService for S {
                         response_type: volo_gen::mini::redis::ResponseType::Value,
                     });
                 }
+            }
+            volo_gen::mini::redis::RequestType::Ping => {
+                return Ok(volo_gen::mini::redis::RedisResponse {
+                    value: req.value,
+                    response_type: volo_gen::mini::redis::ResponseType::Value,
+                });
             }
             volo_gen::mini::redis::RequestType::Del => {
                 let mut count = 0;
