@@ -58,6 +58,20 @@ impl volo_gen::mini::redis::RedisService for S {
                     response_type: volo_gen::mini::redis::ResponseType::Ok,
                 });
             }
+            volo_gen::mini::redis::RequestType::Get => {
+                if let Some(str) = self.map.lock().unwrap().get(&req.key.unwrap().get(0).unwrap().to_string())
+                {
+                    return Ok(volo_gen::mini::redis::RedisResponse {
+                        value: Some(str.clone().into()),
+                        response_type: volo_gen::mini::redis::ResponseType::Value,
+                    });
+                } else {
+                    return Ok(volo_gen::mini::redis::RedisResponse {
+                        value: Some(format!("nil").into()),
+                        response_type: volo_gen::mini::redis::ResponseType::Value,
+                    });
+                }
+            }
             volo_gen::mini::redis::RequestType::Del => {
                 let mut count = 0;
                 for i in req.key.unwrap() {

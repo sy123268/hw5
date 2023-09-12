@@ -39,6 +39,13 @@ async fn main() {
                 request_type: volo_gen::mini::redis::RequestType::Set,
             }
         }
+        else if string_vec[0] == "GET" && string_vec.len() == 2 {
+            req = volo_gen::mini::redis::RedisRequest {
+                key: Some(vec![string_vec.get(1).unwrap().clone().into()]),
+                value: None,
+                request_type: volo_gen::mini::redis::RequestType::Get,
+            }
+        }
         else if string_vec[0] == "DEL" {
             let mut tmp = vec![];
             for i in 1..string_vec.len() {
